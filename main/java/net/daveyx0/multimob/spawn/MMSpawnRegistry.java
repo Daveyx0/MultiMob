@@ -25,7 +25,11 @@ public class MMSpawnRegistry
 		
 		for(MMConfigSpawnEntry configEntry : MMConfig.CONFIGSPAWNS)
 		{
-			SPAWNS.add(getSpawnEntryFromConfig(configEntry));
+			MMSpawnEntry entry = getSpawnEntryFromConfig(configEntry);
+			if(entry != null && entry.getEntityClass() != null)
+			{
+				SPAWNS.add(getSpawnEntryFromConfig(configEntry));
+			}
 		}
 	}
 	

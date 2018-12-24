@@ -10,6 +10,7 @@ import java.util.Set;
 
 import javax.annotation.Nullable;
 
+import net.daveyx0.multimob.core.MultiMob;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -54,8 +55,21 @@ public class ColorUtil
 			int[] color = new int[3];
 			int colorMultiplier = -1;
 			
+			IBlockState backupState = state;
+			
 			state = state.getBlock().getExtendedState(state, worldObj, pos);
 			colorMultiplier = Minecraft.getMinecraft().getBlockColors().colorMultiplier(state, worldObj, pos, 0);
+			
+			TextureAtlasSprite sprite = Minecraft.getMinecraft().getBlockRendererDispatcher().getBlockModelShapes().getTexture(state);
+			
+			if(sprite != null)
+			{
+				String textureName = sprite.getIconName();
+				if(textureName.equals("missingno"))
+				{
+					state = backupState;
+				}
+			}
 					
 			if(state.getBlock() != Blocks.AIR)
 			{			
@@ -70,12 +84,10 @@ public class ColorUtil
 			}
 			else
 			{
-				TextureAtlasSprite sprite = Minecraft.getMinecraft().getBlockRendererDispatcher().getBlockModelShapes().getTexture(state);
-				
 				if(sprite != null)
 				{
 					String textureName = sprite.getIconName();
-				
+					
 					String modelName = textureName.replaceAll(":", ":models/");
 					ModelResourceLocation model = new ModelResourceLocation(modelName);
 					String topTextureName = "";

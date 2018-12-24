@@ -115,6 +115,8 @@ public class ImageUtil {
             }
         }
         
+        if(list != null && list.size() > 0)
+        {
         int totalRed = 0;
         int totalGreen = 0;
         int totalBlue = 0;
@@ -130,7 +132,10 @@ public class ImageUtil {
         int avgGreen = totalGreen/ list.size();
         int avgBlue = totalBlue/ list.size();
         
-        return new int[]{avgRed, avgGreen, avgBlue, 1};    
+        return new int[]{avgRed, avgGreen, avgBlue, 1};
+        }
+
+        return new int[]{0,0,0,1};
     } 
 
     public static int[] getRGBArr(int pixel)

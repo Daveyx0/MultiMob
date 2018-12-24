@@ -7,9 +7,13 @@ import java.util.Set;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
+import net.daveyx0.multimob.config.MMConfigSpawns;
 import net.daveyx0.multimob.core.MultiMob;
+import net.daveyx0.primitivemobs.entity.passive.EntityChameleon;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.management.PlayerChunkMapEntry;
 import net.minecraft.util.math.BlockPos;
@@ -34,7 +38,7 @@ public class MMWorldSpawner
 
         for (EntityPlayer entityplayer : worldServerIn.playerEntities)
         {
-            if (!entityplayer.isSpectator())
+            if (!entityplayer.isSpectator() || MMConfigSpawns.getSpawnInSpectate())
             {
                 int playerX = MathHelper.floor(entityplayer.posX / 16.0D);
                 int playerY = MathHelper.floor(entityplayer.posZ / 16.0D);
@@ -68,12 +72,14 @@ public class MMWorldSpawner
 
         for (MMSpawnEntry entry : MMSpawnRegistry.getSpawnEntries())
         {
-        	if(entry == null || entry.getEntityClass() == null){MultiMob.LOGGER.info("Invalid spawn entry found"); continue; }
+        	if(entry == null || entry.getEntityClass() == null){/*MultiMob.LOGGER.info("Invalid spawn entry found");*/ continue; }
         	
-            int entityCount = worldServerIn.countEntities(entry.getEntityClass());
-            int max = (int)entry.getSpawnFrequency();
+            int entityCount = worldServerIn.countEntities( entry.getEntityClass());
+            
+            int max = (int)(entry.getSpawnFrequency() * chunkCount/ (int)Math.pow(17.0D, 2.0D));
 
-            if (entry.getSpawnFrequency() != 0 && entityCount <= max)
+            //MultiMob.LOGGER.info(entry.getEntryName() + ": " + max + " (" + chunkCount + ")");
+            if (max != 0 && entityCount <= max)
             {
                 List<ChunkPos> shuffled = Lists.newArrayList(this.chunksForSpawning);
                 Collections.shuffle(shuffled);
@@ -113,7 +119,7 @@ public class MMWorldSpawner
                                 
                                 if (entity.isNotColliding())
                                 {
-                                	//MultiMob.LOGGER.info(entity.getName() + " spawned at " + x1 + " " + y + " " + z1);
+                                	//MultiMob.LOGGER.info(entity.getName() + " spawned at " + x1 + " " + y + " " + z1); 
                                     ++successCount;
                                     worldServerIn.spawnEntity(entity);
                                 }

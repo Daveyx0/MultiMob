@@ -11,7 +11,10 @@ import net.daveyx0.multimob.config.MMConfig;
 import net.daveyx0.multimob.message.MMMessageRegistry;
 import net.daveyx0.multimob.spawn.MMSpawnerEventHandler;
 import net.daveyx0.multimob.util.FileUtil;
+import net.minecraft.block.material.Material;
+import net.minecraft.entity.monster.IMob;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.util.EnumHelper;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
@@ -41,6 +44,7 @@ public class MultiMob
 
 		MMMessageRegistry.preInit();
 		MMCapabilities.preInit();
+		
 		MinecraftForge.EVENT_BUS.register(new MMSpawnerEventHandler());	
 		
 		directory = new File(event.getModConfigurationDirectory(), MMReference.MODID);

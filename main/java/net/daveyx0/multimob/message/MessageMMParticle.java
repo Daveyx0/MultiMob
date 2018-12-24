@@ -76,11 +76,11 @@ public class MessageMMParticle implements IMessage
                 	Random rand = MultiMob.proxy.getClientWorld().rand;
                 	if(message.block != 0)
                 	{
-                		MultiMob.proxy.getClientWorld().spawnParticle(EnumParticleTypes.getParticleFromId(message.id), message.x + (rand.nextFloat() - rand.nextFloat()), message.y, message.z + (rand.nextFloat() - rand.nextFloat()), (rand.nextFloat() - rand.nextFloat()), 1.0D, (rand.nextFloat() - rand.nextFloat()), new int[]{message.block});
+                		MultiMob.proxy.getClientWorld().spawnParticle(EnumParticleTypes.getParticleFromId(message.id), message.x + (rand.nextFloat() - rand.nextFloat()), message.y, message.z + (rand.nextFloat() - rand.nextFloat()), message.xVel, message.yVel, message.zVel, new int[]{message.block});
                 	}
                 	else
                 	{
-                		MultiMob.proxy.getClientWorld().spawnParticle(EnumParticleTypes.getParticleFromId(message.id), message.x + (rand.nextFloat() - rand.nextFloat()), message.y, message.z + (rand.nextFloat() - rand.nextFloat()), (rand.nextFloat() - rand.nextFloat()), 1.0D, (rand.nextFloat() - rand.nextFloat()));
+                		MultiMob.proxy.getClientWorld().spawnParticle(EnumParticleTypes.getParticleFromId(message.id), message.x + (rand.nextFloat() - rand.nextFloat()), message.y, message.z + (rand.nextFloat() - rand.nextFloat()), message.xVel, message.yVel, message.zVel);
                 	}
                 }
         		}

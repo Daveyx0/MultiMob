@@ -1,5 +1,6 @@
 package net.daveyx0.multimob.spawn;
 
+import net.daveyx0.multimob.config.MMConfigSpawns;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.storage.WorldInfo;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -29,7 +30,7 @@ public class MMSpawnerEventHandler {
         {
             WorldInfo worldInfo = worldServer.getWorldInfo();
 
-            if (worldInfo.getWorldTotalTime() % 40L == 0L)
+            if (worldInfo.getWorldTotalTime() % MMConfigSpawns.getSpawnTickDelay() == 0)
             {
                 this.worldSpawner.doCustomSpawning(worldServer);
             }
