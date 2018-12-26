@@ -8,6 +8,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
 import net.daveyx0.multimob.config.MMConfigSpawns;
+import net.daveyx0.multimob.core.MMEntityRegistry;
 import net.daveyx0.multimob.core.MultiMob;
 import net.daveyx0.primitivemobs.entity.passive.EntityChameleon;
 import net.minecraft.block.state.IBlockState;
@@ -72,7 +73,8 @@ public class MMWorldSpawner
 
         for (MMSpawnEntry entry : MMSpawnRegistry.getSpawnEntries())
         {
-        	if(entry == null || entry.getEntityClass() == null){/*MultiMob.LOGGER.info("Invalid spawn entry found");*/ continue; }
+        	if(entry == null || entry.getEntityClass() == null || MMEntityRegistry.entities.get(entry.getEntityClass())
+        			 != null && !MMEntityRegistry.entities.get(entry.getEntityClass())){/*MultiMob.LOGGER.info("Invalid spawn entry found");*/ continue; }
         	
             int entityCount = worldServerIn.countEntities( entry.getEntityClass());
             

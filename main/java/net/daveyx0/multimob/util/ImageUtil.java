@@ -135,7 +135,7 @@ public class ImageUtil {
         return new int[]{avgRed, avgGreen, avgBlue, 1};
         }
 
-        return new int[]{0,0,0,1};
+        return new int[]{0,0,0,255};
     } 
 
     public static int[] getRGBArr(int pixel)

@@ -45,9 +45,9 @@ public class EntityUtil {
 	 		return stack.getDisplayName();
 	 	}
 	    
-	    public static void removeWhenDisabled(EntityLiving entity)
+	    public static void removeWhenDisabled(Entity entity)
 	    {
-			if (MMEntityRegistry.enabledEntities.containsKey(entity.getClass()) && !MMEntityRegistry.enabledEntities.get(entity.getClass()))
+			if (MMEntityRegistry.entities.containsKey(entity.getClass()) && !MMEntityRegistry.entities.get(entity.getClass()))
 			{
 				entity.setDead();
 			}

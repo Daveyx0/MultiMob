@@ -44,20 +44,23 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class ColorUtil 
 {
 	//Gets the RGB color of a blockstate
-	public static int[] getBlockStateColor(IBlockState state, @Nullable BlockPos pos, @Nullable World worldObj)
+	public static int[] getBlockStateColor(IBlockState state, @Nullable BlockPos pos, @Nullable World worldObj, boolean useExtendedState)
 	{
-		return getBlockStateColor(state, pos, worldObj, EnumFacing.UP);
+		return getBlockStateColor(state, pos, worldObj, EnumFacing.UP, useExtendedState);
 	}
 	
 	//Gets the RGB color of a blockstate
-	public static int[] getBlockStateColor(IBlockState state, @Nullable BlockPos pos, @Nullable World worldObj, EnumFacing face)
+	public static int[] getBlockStateColor(IBlockState state, @Nullable BlockPos pos, @Nullable World worldObj, EnumFacing face, boolean useExtendedState)
 	{
 			int[] color = new int[3];
 			int colorMultiplier = -1;
-			
 			IBlockState backupState = state;
 			
-			state = state.getBlock().getExtendedState(state, worldObj, pos);
+			if(useExtendedState)
+			{
+				state = state.getBlock().getExtendedState(state, worldObj, pos);
+			}
+			
 			colorMultiplier = Minecraft.getMinecraft().getBlockColors().colorMultiplier(state, worldObj, pos, 0);
 			
 			TextureAtlasSprite sprite = Minecraft.getMinecraft().getBlockRendererDispatcher().getBlockModelShapes().getTexture(state);
@@ -68,6 +71,8 @@ public class ColorUtil
 				if(textureName.equals("missingno"))
 				{
 					state = backupState;
+					colorMultiplier = Minecraft.getMinecraft().getBlockColors().colorMultiplier(state, worldObj, pos, 0);
+					sprite = Minecraft.getMinecraft().getBlockRendererDispatcher().getBlockModelShapes().getTexture(state);
 				}
 			}
 					
@@ -128,7 +133,12 @@ public class ColorUtil
 				}
 			}
 		}
-
+			
+			if(isColorInvalid(color) && useExtendedState)
+			{
+				color =	ColorUtil.getBlockStateColor(state, pos, worldObj, face, false);
+			}
+			
 			return color;
 	}
 
@@ -310,7 +320,7 @@ public class ColorUtil
 		if(state.getBlock() != Blocks.AIR)
 		{
 			
-			int[] newColor = ColorUtil.getBlockStateColor(state, pos, entity.getEntityWorld());
+			int[] newColor = ColorUtil.getBlockStateColor(state, pos, entity.getEntityWorld(), false);
 			if(newColor != null)
 			{
 				Color color = new Color(newColor[0], newColor[1], newColor[2]);
@@ -359,6 +369,11 @@ public class ColorUtil
             e.printStackTrace();
         }
         return greyscaleTexture;
+    }
+    
+    public static boolean isColorInvalid(int[] color)
+    {
+    	return color == null || color.length == 0 || (color[0] == 0 && color[1] == 0 && color[2] == 0);
     }
 
 }
