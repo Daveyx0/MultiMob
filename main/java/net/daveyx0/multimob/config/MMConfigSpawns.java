@@ -12,16 +12,33 @@ public class MMConfigSpawns {
 	private static String[] entitiesToSpawn;
 	private static int spawnTickDelay;
 	private static boolean spawnInSpectate;
+	private static boolean useBetaSpawning;
+	
+	private static int monsterSpawnLimit;
+	private static int passiveSpawnLimit;
+	private static int waterSpawnLimit;
+	private static int lavaSpawnLimit;
+	
+	public static void loadGeneralOptions(Configuration config)
+	{
+		config.addCustomCategoryComment("generalOptions", "Some general MultiMob config options");
+		config.getCategory("generalOptions").setRequiresMcRestart(true);
+		spawnTickDelay = config.get("generalOptions", "Tick delay between spawns", 40, " (Only for Beta spawning) The Tick delay between spawn attempts for MultiMob. Lower for more common spawns.").getInt();
+		spawnInSpectate = config.get("generalOptions", "Allow spawning in spectate mode", false, " (Only for Beta spawning) Enable/Disable allowing the MultiMob system to spawn while in spectator mode.").getBoolean();
+		useBetaSpawning = config.get("generalOptions", "Use the Unique MultiMob spawning (experimental)", false, "Enable/Disable MultiMob spawning; a system seperate from normal Minecraft spawning. Not recommended right now.").getBoolean();
+		monsterSpawnLimit = config.get("generalOptions", "Spawn limit for MultiMob Monster type", 30, "Determines how many mobs can spawn of the creature type: MultiMob Monster.").getInt();
+		passiveSpawnLimit = config.get("generalOptions", "Spawn limit for MultiMob Passive type", 10, "Determines how many mobs can spawn of the creature type: MultiMob Passive.").getInt();
+		waterSpawnLimit = config.get("generalOptions", "Spawn limit for MultiMob Water type", 10, "Determines how many mobs can spawn of the creature type: MultiMob Water.").getInt();
+		lavaSpawnLimit = config.get("generalOptions", "Spawn limit for MultiMob Lava type", 5, "Determines how many mobs can spawn of the creature type: MultiMob Lava.").getInt();
+	}
 
 	public static void load(Configuration config) {
+		
+		loadGeneralOptions(config);
 		
 		if(defaultEntitiesToSpawn.isEmpty()) {defaultEntitiesToSpawn.add("");}
 		config.addCustomCategoryComment("extraEntries", "Add additional spawn entries. Simply add a name for the entry, then '#' followed by the mob resource name (like minecraft:zombie) and it generates a new entry (go back to the main menu to refresh)");
 		entitiesToSpawn = config.get("extraEntries", "Mob spawns", convertListToArray(defaultEntitiesToSpawn)).getStringList();
-		config.addCustomCategoryComment("generalOptions", "Some general MultiMob config options");
-		spawnTickDelay = config.get("generalOptions", "Tick delay between spawns", 40, "The Tick delay between spawn attempts for MultiMob. Lower for more common spawns.").getInt();
-		spawnInSpectate = config.get("generalOptions", "Allow spawning in spectate mode", false, "Enable/Disable allowing the MultiMob system to spawn while in spectator mode.").getBoolean();
-		
 	}
 	
 	public static String[] getConfigSpawnEntries()
@@ -34,9 +51,34 @@ public class MMConfigSpawns {
 		return spawnTickDelay;
 	}
 	
+	public static int getMonsterSpawnLimit()
+	{
+		return monsterSpawnLimit;
+	}
+	
+	public static int getPassiveSpawnLimit()
+	{
+		return passiveSpawnLimit;
+	}
+	
+	public static int getWaterSpawnLimit()
+	{
+		return waterSpawnLimit;
+	}
+	
+	public static int getLavaSpawnLimit()
+	{
+		return lavaSpawnLimit;
+	}
+	
 	public static boolean getSpawnInSpectate()
 	{
 		return spawnInSpectate;
+	}
+	
+	public static boolean getUseBetaSpawning()
+	{
+		return useBetaSpawning;
 	}
 	
 	public static void addConfigSpawnEntry(MMConfigSpawnEntry entry)

@@ -15,6 +15,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EnumCreatureType;
+import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.management.PlayerChunkMapEntry;
 import net.minecraft.util.math.BlockPos;
@@ -78,7 +79,7 @@ public class MMWorldSpawner
         	
             int entityCount = worldServerIn.countEntities( entry.getEntityClass());
             
-            int max = (int)(entry.getSpawnFrequency() * chunkCount/ (int)Math.pow(17.0D, 2.0D));
+            int max = (int)(entry.getSpawnLimit() * chunkCount/ (int)Math.pow(17.0D, 2.0D));
 
             //MultiMob.LOGGER.info(entry.getEntryName() + ": " + max + " (" + chunkCount + ")");
             if (max != 0 && entityCount <= max)
@@ -105,6 +106,7 @@ public class MMWorldSpawner
                             try
                             {
                                 entity = (EntityLiving)entry.getEntityClass().getConstructor(new Class[] {World.class}).newInstance(new Object[] {worldServerIn});
+
                             }
                             catch (Exception exception)
                             {

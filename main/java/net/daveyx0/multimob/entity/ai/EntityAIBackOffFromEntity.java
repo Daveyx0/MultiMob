@@ -4,6 +4,7 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAIBase;
+import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 
@@ -82,7 +83,7 @@ public class EntityAIBackOffFromEntity extends EntityAIBase {
             	creature.getJumpHelper().setJumping();
             }
             
-            if(defensiveAttack && !this.creature.getEntityWorld().isRemote && this.creature.getHealth() < (this.creature.getMaxHealth() /2)&& this.creature.getRNG().nextInt(20) == 0)
+            if(defensiveAttack && creature instanceof EntityCreeper && !this.creature.getEntityWorld().isRemote && this.creature.getHealth() < (this.creature.getMaxHealth() /2)&& this.creature.getRNG().nextInt(20) == 0)
             {
             	int i = (int)(this.creature.posX - 0.5F);
                 int j = (int)this.creature.posY;

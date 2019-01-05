@@ -3,8 +3,9 @@ package net.daveyx0.multimob.spawn;
 import java.util.List;
 import java.util.Set;
 
+import net.daveyx0.multimob.config.MMConfigSpawns;
+import net.daveyx0.multimob.core.MMEnums;
 import net.daveyx0.multimob.core.MultiMob;
-import net.daveyx0.multimob.spawn.MMSpawnEntry.CustomSpawnPlacementType;
 import net.daveyx0.multimob.spawn.MMSpawnEntry.WeatherCondition;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -30,24 +31,18 @@ public class MMSpawnChecks {
 	
 	public static boolean performSpawnChecks(WorldServer worldIn, BlockPos pos, MMSpawnEntry entry)
 	{
-		//if(entry.getEntryName().equals("_Chameleon")){ enableDebug = true;} else{enableDebug = false;}
+		//if(entry.getEntryName().equals("_FlameSpewer_Nether")){ enableDebug = true;} else{enableDebug = false;}
+		
 		if(!entry.getIsAllowedToSpawn()) {debug(entry, 0, pos, enableDebug); return false;}
 		if(!isWithinWorldBorder(worldIn, pos)) {debug(entry, 1, pos, enableDebug);return false;}
 		if(!entry.getIsAllowedOnPeaceful() && worldIn.getDifficulty() == EnumDifficulty.PEACEFUL) {debug(entry, 2, pos, enableDebug); return false;}
 		if(!isLuckyEnoughToSpawn(worldIn, entry.getAdditionalRarity())){debug(entry, 3, pos, enableDebug); return false;}
 		if(!isDimensionSuitable(worldIn, entry.getDimensions())){debug(entry, 4, pos, enableDebug); return false;}
-		if(!isBiomeTypeSuitable(worldIn, pos, entry.getBiomeTypes())) {debug(entry, 5, pos, enableDebug); return false;}
-		if(!isBiomeSuitable(worldIn, pos, entry.getBiomes())) {debug(entry, 6, pos, enableDebug); return false;}
+		if(MMConfigSpawns.getUseBetaSpawning() && !isBiomeTypeSuitable(worldIn, pos, entry.getBiomeTypes())) {debug(entry, 5, pos, enableDebug); return false;}
+		if(MMConfigSpawns.getUseBetaSpawning() && !isBiomeSuitable(worldIn, pos, entry.getBiomes())) {debug(entry, 6, pos, enableDebug); return false;}
 		if(!isWeatherConditionSuitable(worldIn, pos, entry.getWeatherCondition())) {debug(entry, 19, pos, enableDebug); return false;}
 		if(!isInsideSuitableStructure(worldIn, pos, entry.getStructures())) {debug(entry, 7, pos, enableDebug); return false;}
-		if(entry.getCustomSpawnPlacementType() == CustomSpawnPlacementType.NONE)
-		{
-			if(!canVanillaCreatureTypeSpawnHere(worldIn, pos, entry.getSpawnPlacementType())) {debug(entry, 8, pos, enableDebug); return false;}
-		}
-		else
-		{
-			if(!canCustomCreatureTypeSpawnHere(worldIn, pos, entry.getCustomSpawnPlacementType())) {debug(entry, 8, pos, enableDebug); return false;}
-		}
+		if(MMConfigSpawns.getUseBetaSpawning() && !canCreatureTypeSpawnHere(worldIn, pos, entry.getSpawnPlacementType())) {debug(entry, 8, pos, enableDebug); return false;}
 		if(entry.getNeedsToSeeSky() && !canPositionSeeSky(worldIn, pos)) {debug(entry, 18, pos, enableDebug); return false;}
 		if(!isHeightLevelSuitable(pos, entry.getHeightLevelRange()[0], entry.getHeightLevelRange()[1])){debug(entry, 9, pos, enableDebug); return false;}
 		if(!isLightLevelSuitable(worldIn, pos, entry.getLightLevelRange()[0], entry.getLightLevelRange()[1])){debug(entry, 10, pos, enableDebug); return false;}
@@ -221,11 +216,15 @@ public class MMSpawnChecks {
 		return check ? true : worldIn.getDifficulty() != EnumDifficulty.PEACEFUL;
 	}
 	
-	public static boolean canVanillaCreatureTypeSpawnHere(World worldIn, BlockPos pos, EntityLiving.SpawnPlacementType spawnType)
+	public static boolean canCreatureTypeSpawnHere(World worldIn, BlockPos pos, EntityLiving.SpawnPlacementType spawnType)
 	{
 		 IBlockState iblockstate = worldIn.getBlockState(pos);
 
-         if (spawnType == EntityLiving.SpawnPlacementType.IN_WATER)
+		 if(spawnType == MMEnums.IN_LAVA)
+		 {
+			 return iblockstate.getMaterial() == Material.LAVA && worldIn.getBlockState(pos.down()).getMaterial() == Material.LAVA && !worldIn.getBlockState(pos.up()).isNormalCube();
+		 }
+		 else if (spawnType == EntityLiving.SpawnPlacementType.IN_WATER)
          {
              return iblockstate.getMaterial() == Material.WATER && worldIn.getBlockState(pos.down()).getMaterial() == Material.WATER && !worldIn.getBlockState(pos.up()).isNormalCube();
          }
@@ -245,31 +244,6 @@ public class MMSpawnChecks {
                  return flag && WorldEntitySpawner.isValidEmptySpawnBlock(iblockstate) && WorldEntitySpawner.isValidEmptySpawnBlock(worldIn.getBlockState(pos.up()));
              }
          }
-	}
-	
-	public static boolean canCustomCreatureTypeSpawnHere(World worldIn, BlockPos pos, MMSpawnEntry.CustomSpawnPlacementType type)
-	{
-		 IBlockState iblockstate = worldIn.getBlockState(pos);
-		if (type == MMSpawnEntry.CustomSpawnPlacementType.IN_LAVA)
-        {
-            return iblockstate.getMaterial() == Material.LAVA && worldIn.getBlockState(pos.down()).getMaterial() == Material.LAVA && !worldIn.getBlockState(pos.up()).isNormalCube();
-        }
-        else if (type == MMSpawnEntry.CustomSpawnPlacementType.IN_BLOCK)
-        {
-        	//TODO
-        	return false;
-        }
-        else if (type == MMSpawnEntry.CustomSpawnPlacementType.IN_LIQUID)
-        {
-        	//TODO
-        	return false;
-        }
-        else if (type == MMSpawnEntry.CustomSpawnPlacementType.CUSTOM)
-        {
-        	//TODO
-        	return false;
-        }
-        return false;
 	}
 	
 	public static boolean hasLoadsOfSpaceAbove(World worldIn, BlockPos pos)

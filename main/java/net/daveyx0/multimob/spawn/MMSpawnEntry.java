@@ -5,6 +5,7 @@ import java.util.List;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving.SpawnPlacementType;
+import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.BiomeDictionary.Type;
 
@@ -13,12 +14,13 @@ public class MMSpawnEntry
 	private String entryName;
     private Class<? extends Entity> entityClass;
     
-    private CustomSpawnPlacementType customSpawnType;
     private SpawnPlacementType spawnType;
     private WeatherCondition weatherCondition;
+    private EnumCreatureType creatureType;
     
     private int[] heightLevelRange;
     private int[] lightLevelRange;
+    private int[] groupSizeRange;
     
     private List<Class<? extends Entity>> entitiesNear;
     private List<IBlockState> blocksNear;
@@ -36,6 +38,7 @@ public class MMSpawnEntry
     
     private int spawnFrequency;
     private int additionalRarity;
+    private int spawnWeight;
 
     public MMSpawnEntry(String entryName, Class<? extends Entity> class1, MMConfigSpawnEntry config)
     {
@@ -51,7 +54,6 @@ public class MMSpawnEntry
     
     public void reloadInfoFromConfig(MMConfigSpawnEntry config)
     {
-        customSpawnType = config.getCustomSpawnPlacementType();
         spawnType = config.getSpawnPlacementType();
         heightLevelRange = config.getHeightLevelRange();
         lightLevelRange = config.getLightLevelRange();
@@ -67,9 +69,12 @@ public class MMSpawnEntry
         isAllowedToSpawn = config.getIsAllowedToSpawn();
         needsLoadsOfSpace = config.getNeedsLoadsOfSpace();
         needsToSeeSky = config.getNeedsToSeeSky();
-        spawnFrequency = config.getSpawnFrequency();
+        spawnFrequency = config.getSpawnLimit();
         additionalRarity = config.getAdditionalRarity();
         weatherCondition = config.getWeatherCondition();
+        spawnWeight = config.getSpawnWeight();
+        creatureType = config.getCreatureType();
+        groupSizeRange = config.getGroupSizeRange();
     }
     
     //Get Methods
@@ -83,9 +88,14 @@ public class MMSpawnEntry
     	return entityClass;
     }
     
-    public int getSpawnFrequency()
+    public int getSpawnLimit()
     {
     	return spawnFrequency;
+    }
+    
+    public int getSpawnWeight()
+    {
+    	return spawnWeight;
     }
     
     public int getAdditionalRarity()
@@ -98,14 +108,14 @@ public class MMSpawnEntry
     	return spawnType;
     }
     
-    public CustomSpawnPlacementType getCustomSpawnPlacementType()
-    {
-    	return customSpawnType;
-    }
-    
     public WeatherCondition getWeatherCondition()
     {
     	return weatherCondition;
+    }
+    
+    public EnumCreatureType getCreatureType()
+    {
+    	return creatureType;
     }
     
     public int[] getHeightLevelRange()
@@ -117,6 +127,11 @@ public class MMSpawnEntry
     {
     	return lightLevelRange;
     }
+    
+	public int[] getGroupSizeRange() {
+
+		return groupSizeRange;
+	}
     
     public List<Class<? extends Entity>> getEntitiesNearList()
     {
@@ -176,15 +191,6 @@ public class MMSpawnEntry
     public boolean getNeedsToSeeSky()
     {
     	return needsToSeeSky;
-    }
-    
-    static enum CustomSpawnPlacementType
-    {
-    	NONE,
-    	IN_LAVA,
-    	IN_BLOCK,
-    	IN_LIQUID,
-    	CUSTOM
     }
     
     static enum WeatherCondition

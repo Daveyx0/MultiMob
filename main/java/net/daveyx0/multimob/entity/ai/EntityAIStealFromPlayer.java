@@ -165,7 +165,7 @@ public class EntityAIStealFromPlayer extends EntityAIBase {
 							
 							this.temptingPlayer.playSound(SoundEvents.ENTITY_CHICKEN_EGG, 1.0F, (world.rand.nextFloat() - world.rand.nextFloat()) * 0.2F + 1.0F);
 		
-							ItemStack loot = item.copy();
+							ItemStack loot = item.splitStack(1);
 							this.temptedEntity.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, loot);
 							
 		    				if(!temptingPlayer.capabilities.isCreativeMode)

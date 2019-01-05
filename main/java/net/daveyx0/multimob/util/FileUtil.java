@@ -21,6 +21,9 @@ public class FileUtil {
 		listResourcesForRegistry(directory, "allEntites", ForgeRegistries.ENTITIES.getKeys());
 		listResourcesForRegistry(directory, "allItems", ForgeRegistries.ITEMS.getKeys());
 		listResourcesForRegistry(directory, "allBlocks", ForgeRegistries.BLOCKS.getKeys());
+		listResourcesForRegistry(directory, "allPotions", ForgeRegistries.POTIONS.getKeys());
+		listResourcesForRegistry(directory, "allPotionTypes", ForgeRegistries.POTION_TYPES.getKeys());
+		listResourcesForRegistry(directory, "allEnchantments", ForgeRegistries.ENCHANTMENTS.getKeys());
 		listBiomeResources(directory, "allBiomes", "allBiomeTypes");
 		listBlockStateResources(directory, "allBlockStates");
 		listStructureResources(directory, "allVanillaStructures");

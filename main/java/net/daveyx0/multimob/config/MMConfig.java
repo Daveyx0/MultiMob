@@ -21,6 +21,7 @@ public class MMConfig {
 
 	public static void preInit(File dir, FMLPreInitializationEvent event) {
 		config = new Configuration(new File(dir, "multimob_spawns.cfg"));
+		MMConfigSpawns.loadGeneralOptions(config);
 		
 		MMConfigSpawnEntry.setupCategoryDescriptions(config);
 		MinecraftForge.EVENT_BUS.register(new MMConfig());
