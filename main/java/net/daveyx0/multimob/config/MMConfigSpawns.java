@@ -3,7 +3,9 @@ package net.daveyx0.multimob.config;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.daveyx0.multimob.core.MultiMob;
 import net.daveyx0.multimob.spawn.MMConfigSpawnEntry;
+import net.minecraft.entity.EnumCreatureType;
 import net.minecraftforge.common.config.Configuration;
 
 public class MMConfigSpawns {
@@ -12,24 +14,39 @@ public class MMConfigSpawns {
 	private static String[] entitiesToSpawn;
 	private static int spawnTickDelay;
 	private static boolean spawnInSpectate;
-	private static boolean useBetaSpawning;
+	private static boolean useAdditionalSpawning;
 	
 	private static int monsterSpawnLimit;
 	private static int passiveSpawnLimit;
 	private static int waterSpawnLimit;
 	private static int lavaSpawnLimit;
 	
+	private static int vanillaMonsterSpawnLimit;
+	private static int vanillaCreatureSpawnLimit;
+	private static int vanillaAmbientSpawnLimit;
+	private static int vanillaWaterSpawnLimit;
+	
+	private static int otherSpawnLimit;
+	
+	private static int[] dimensionWhiteList;
+	private static int[] defaultWhiteList = new int[]{0};
+	
 	public static void loadGeneralOptions(Configuration config)
 	{
-		config.addCustomCategoryComment("generalOptions", "Some general MultiMob config options");
-		config.getCategory("generalOptions").setRequiresMcRestart(true);
-		spawnTickDelay = config.get("generalOptions", "Tick delay between spawns", 40, " (Only for Beta spawning) The Tick delay between spawn attempts for MultiMob. Lower for more common spawns.").getInt();
-		spawnInSpectate = config.get("generalOptions", "Allow spawning in spectate mode", false, " (Only for Beta spawning) Enable/Disable allowing the MultiMob system to spawn while in spectator mode.").getBoolean();
-		useBetaSpawning = config.get("generalOptions", "Use the Unique MultiMob spawning (experimental)", false, "Enable/Disable MultiMob spawning; a system seperate from normal Minecraft spawning. Not recommended right now.").getBoolean();
-		monsterSpawnLimit = config.get("generalOptions", "Spawn limit for MultiMob Monster type", 30, "Determines how many mobs can spawn of the creature type: MultiMob Monster.").getInt();
-		passiveSpawnLimit = config.get("generalOptions", "Spawn limit for MultiMob Passive type", 10, "Determines how many mobs can spawn of the creature type: MultiMob Passive.").getInt();
-		waterSpawnLimit = config.get("generalOptions", "Spawn limit for MultiMob Water type", 10, "Determines how many mobs can spawn of the creature type: MultiMob Water.").getInt();
-		lavaSpawnLimit = config.get("generalOptions", "Spawn limit for MultiMob Lava type", 5, "Determines how many mobs can spawn of the creature type: MultiMob Lava.").getInt();
+		config.addCustomCategoryComment("additionalSpawningOptions", "These options only apply when using the Additional Spawning system, which can also be enabled here.");
+		spawnTickDelay = config.get("additionalSpawningOptions", "Tick delay between spawns", 10, "The Tick delay between spawn attempts for MultiMob. Lower for more common spawns.").getInt();
+		spawnInSpectate = config.get("additionalSpawningOptions", "Allow spawning in spectate mode", false, "Enable/Disable allowing the MultiMob system to spawn while in spectator mode.").getBoolean();
+		useAdditionalSpawning = config.get("additionalSpawningOptions", "Use an additional world spawner to do extra spawns", false, "Enable/Disable to activate an additional spawner to add more mobs to the world.").getBoolean();
+		monsterSpawnLimit = config.get("additionalSpawningOptions", "Spawn limit for MultiMob Monster type", 0, "Determines how many additional mobs can spawn of the creature type: MultiMob Monster.").getInt();
+		passiveSpawnLimit = config.get("additionalSpawningOptions", "Spawn limit for MultiMob Passive type", 0, "Determines how many additional mobs can spawn of the creature type: MultiMob Passive.").getInt();
+		waterSpawnLimit = config.get("additionalSpawningOptions", "Spawn limit for MultiMob Water type", 0, "Determines how many additional mobs can spawn of the creature type: MultiMob Water.").getInt();
+		lavaSpawnLimit = config.get("additionalSpawningOptions", "Spawn limit for MultiMob Lava type", 0, "Determines how many additional mobs can spawn of the creature type: MultiMob Lava.").getInt();
+		vanillaMonsterSpawnLimit = config.get("additionalSpawningOptions", "Spawn limit for Vanilla Monster type", 0, "Determines how many additional mobs can spawn of the creature type: Monster.").getInt();
+		vanillaAmbientSpawnLimit = config.get("additionalSpawningOptions", "Spawn limit for Vanilla Ambient type", 0, "Determines how many additional mobs can spawn of the creature type: Ambient.").getInt();
+		vanillaCreatureSpawnLimit = config.get("additionalSpawningOptions", "Spawn limit for Vanilla Creature type", 0, "Determines how many additional mobs can spawn of the creature type: Creature.").getInt();
+		vanillaWaterSpawnLimit = config.get("additionalSpawningOptions", "Spawn limit for Vanilla Water type", 0, "Determines how many additional mobs can spawn of the creature type: Water.").getInt();
+		otherSpawnLimit= config.get("additionalSpawningOptions", "Spawn limit for Modded type", 0, "Determines how many additional mobs can spawn of creature types from other mods.").getInt();
+		dimensionWhiteList= config.get("additionalSpawningOptions", "Dimensions to apply additional spawns for", defaultWhiteList, "Determines which dimensions the additional spawns will count for.").getIntList();
 	}
 
 	public static void load(Configuration config) {
@@ -51,24 +68,44 @@ public class MMConfigSpawns {
 		return spawnTickDelay;
 	}
 	
-	public static int getMonsterSpawnLimit()
+	public static int getSpawnLimitIncrease(EnumCreatureType type)
 	{
-		return monsterSpawnLimit;
-	}
-	
-	public static int getPassiveSpawnLimit()
-	{
-		return passiveSpawnLimit;
-	}
-	
-	public static int getWaterSpawnLimit()
-	{
-		return waterSpawnLimit;
-	}
-	
-	public static int getLavaSpawnLimit()
-	{
-		return lavaSpawnLimit;
+		if(type == EnumCreatureType.MONSTER)
+		{
+			return vanillaMonsterSpawnLimit;
+		}
+		else if(type == EnumCreatureType.AMBIENT)
+		{
+			return vanillaAmbientSpawnLimit;
+		}
+		else if(type == EnumCreatureType.CREATURE)
+		{
+			return vanillaCreatureSpawnLimit;
+		}
+		else if(type == EnumCreatureType.WATER_CREATURE)
+		{
+			return vanillaWaterSpawnLimit;
+		}
+		else if(type == MultiMob.MULTIMOB_MONSTER)
+		{
+			return monsterSpawnLimit;
+		}
+		else if(type == MultiMob.MULTIMOB_PASSIVE)
+		{
+			return passiveSpawnLimit;
+		}
+		else if(type == MultiMob.MULTIMOB_WATER)
+		{
+			return waterSpawnLimit;
+		}
+		else if(type == MultiMob.MULTIMOB_LAVA)
+		{
+			return lavaSpawnLimit;
+		}
+		else
+		{
+			return otherSpawnLimit;
+		}
 	}
 	
 	public static boolean getSpawnInSpectate()
@@ -76,15 +113,20 @@ public class MMConfigSpawns {
 		return spawnInSpectate;
 	}
 	
-	public static boolean getUseBetaSpawning()
+	public static boolean getUseAdditionalSpawning()
 	{
-		return useBetaSpawning;
+		return useAdditionalSpawning;
 	}
 	
 	public static void addConfigSpawnEntry(MMConfigSpawnEntry entry)
 	{
 		//defaultEntitiesToSpawn.add(entry.getEntryName() + "#" + entry.entityName);
 		MMConfig.EXTERNALCONFIGSPAWNS.add(entry);
+	}
+	
+	public static int[] getDimensionWhiteList()
+	{
+		return dimensionWhiteList;
 	}
 	
 	public static String[] convertListToArray(List<String> list)

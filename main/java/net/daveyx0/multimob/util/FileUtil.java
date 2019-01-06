@@ -18,7 +18,7 @@ public class FileUtil {
 	
 	public static void createTextFilesForModInfo(File directory) throws IOException
 	{
-		listResourcesForRegistry(directory, "allEntites", ForgeRegistries.ENTITIES.getKeys());
+		listResourcesForRegistry(directory, "allEntities", ForgeRegistries.ENTITIES.getKeys());
 		listResourcesForRegistry(directory, "allItems", ForgeRegistries.ITEMS.getKeys());
 		listResourcesForRegistry(directory, "allBlocks", ForgeRegistries.BLOCKS.getKeys());
 		listResourcesForRegistry(directory, "allPotions", ForgeRegistries.POTIONS.getKeys());

@@ -18,10 +18,6 @@ public class MMSpawnerEventHandler {
 
     public MMSpawnerEventHandler()
     {
-    	if (MMConfigSpawns.getUseBetaSpawning())
-    	{
-            this.worldSpawner = new MMWorldSpawner();
-    	}
     }
 
     //Custom spawning; not used for now. Needs to be improved. Can still be used with config changes.
@@ -35,14 +31,22 @@ public class MMSpawnerEventHandler {
 
         WorldServer worldServer = (WorldServer)event.world;
 
-        if (MMConfigSpawns.getUseBetaSpawning() && worldServer.getGameRules().getBoolean("doMobSpawning"))
+        if (MMConfigSpawns.getUseAdditionalSpawning())
         {
+        	if(worldSpawner == null)
+        	{
+            	this.worldSpawner = new MMWorldSpawner();
+        	}
             WorldInfo worldInfo = worldServer.getWorldInfo();
 
             if (worldInfo.getWorldTotalTime() % MMConfigSpawns.getSpawnTickDelay() == 0)
             {
-                this.worldSpawner.doCustomSpawning(worldServer);
+                this.worldSpawner.findChunksForSpawning(worldServer, worldServer.getGameRules().getBoolean("doMobSpawning"), true, true);
             }
+        }
+        else
+        {
+        	worldSpawner = null;
         }
     }
 
@@ -50,9 +54,6 @@ public class MMSpawnerEventHandler {
     @SubscribeEvent
     public void onCheckSpawn(LivingSpawnEvent.CheckSpawn event)
     {
-    	
-    	if (!MMConfigSpawns.getUseBetaSpawning()) 
-    	{
     	for(MMSpawnEntry entry: MMSpawnRegistry.getSpawnEntries())
     	{
     		if(entry.getEntityClass().equals(event.getEntityLiving().getClass()))
@@ -74,7 +75,6 @@ public class MMSpawnerEventHandler {
     				event.setResult(Result.DENY);
     			}
     		}
-    	}
     	}
     }
     

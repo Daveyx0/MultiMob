@@ -7,12 +7,12 @@ public class MMModIntegrationRegistry {
 
 	public static IModIntegration registerModIntegration(IModIntegration integration)
 	{
-		if (Loader.isModLoaded("jeresources") && integration instanceof JustEnoughResourcesIntegration) 
+		if (integration instanceof JustEnoughResourcesIntegration) 
 		{
 			integration.init();
 		}
 		
-		if (Loader.isModLoaded("dynamictrees") && integration instanceof DynamicTreesIntegration) 
+		if (integration instanceof DynamicTreesIntegration) 
 		{
 			integration.init();
 		}

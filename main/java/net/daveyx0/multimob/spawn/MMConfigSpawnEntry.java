@@ -3,7 +3,7 @@ package net.daveyx0.multimob.spawn;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.daveyx0.multimob.core.MMEnums;
+import net.daveyx0.multimob.core.MultiMob;
 import net.daveyx0.multimob.spawn.MMSpawnEntry.WeatherCondition;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -40,7 +40,7 @@ public class MMConfigSpawnEntry {
 	
 	public MMConfigSpawnEntry(String entryName, String entityName)
 	{
-		this(entryName, entityName, 10, true);
+		this(entryName, entityName, 100, true);
 		this.entryName = entryName;
 		this.entityName = entityName;
 	}
@@ -113,7 +113,7 @@ public class MMConfigSpawnEntry {
 	{
 		if(spawnType.equals("LAVA"))
 		{
-			return MMEnums.IN_LAVA;
+			return MultiMob.IN_LAVA;
 		}
 		else if(spawnType.equals("AIR"))
 		{
@@ -319,19 +319,19 @@ public class MMConfigSpawnEntry {
 	{
 		if(creatureType.equals("MULTIMOBMONSTER"))
 		{
-			return MMEnums.MULTIMOB_MONSTER;
+			return MultiMob.MULTIMOB_MONSTER;
 		}
 		else if(creatureType.equals("MULTIMOBPASSIVE"))
 		{
-			return MMEnums.MULTIMOB_PASSIVE;
+			return MultiMob.MULTIMOB_PASSIVE;
 		}
 		else if(creatureType.equals("MULTIMOBWATER"))
 		{
-			return MMEnums.MULTIMOB_WATER;
+			return MultiMob.MULTIMOB_WATER;
 		}
 		else if(creatureType.equals("MULTIMOBLAVA"))
 		{
-			return MMEnums.MULTIMOB_LAVA;
+			return MultiMob.MULTIMOB_LAVA;
 		}
 		else if(creatureType.equals("CREATURE"))
 		{

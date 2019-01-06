@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Set;
 
 import net.daveyx0.multimob.config.MMConfigSpawns;
-import net.daveyx0.multimob.core.MMEnums;
 import net.daveyx0.multimob.core.MultiMob;
 import net.daveyx0.multimob.spawn.MMSpawnEntry.WeatherCondition;
 import net.minecraft.block.Block;
@@ -38,11 +37,11 @@ public class MMSpawnChecks {
 		if(!entry.getIsAllowedOnPeaceful() && worldIn.getDifficulty() == EnumDifficulty.PEACEFUL) {debug(entry, 2, pos, enableDebug); return false;}
 		if(!isLuckyEnoughToSpawn(worldIn, entry.getAdditionalRarity())){debug(entry, 3, pos, enableDebug); return false;}
 		if(!isDimensionSuitable(worldIn, entry.getDimensions())){debug(entry, 4, pos, enableDebug); return false;}
-		if(MMConfigSpawns.getUseBetaSpawning() && !isBiomeTypeSuitable(worldIn, pos, entry.getBiomeTypes())) {debug(entry, 5, pos, enableDebug); return false;}
-		if(MMConfigSpawns.getUseBetaSpawning() && !isBiomeSuitable(worldIn, pos, entry.getBiomes())) {debug(entry, 6, pos, enableDebug); return false;}
+		//if(MMConfigSpawns.getUseBetaSpawning() && !isBiomeTypeSuitable(worldIn, pos, entry.getBiomeTypes())) {debug(entry, 5, pos, enableDebug); return false;}
+		//if(MMConfigSpawns.getUseBetaSpawning() && !isBiomeSuitable(worldIn, pos, entry.getBiomes())) {debug(entry, 6, pos, enableDebug); return false;}
 		if(!isWeatherConditionSuitable(worldIn, pos, entry.getWeatherCondition())) {debug(entry, 19, pos, enableDebug); return false;}
 		if(!isInsideSuitableStructure(worldIn, pos, entry.getStructures())) {debug(entry, 7, pos, enableDebug); return false;}
-		if(MMConfigSpawns.getUseBetaSpawning() && !canCreatureTypeSpawnHere(worldIn, pos, entry.getSpawnPlacementType())) {debug(entry, 8, pos, enableDebug); return false;}
+		//if(MMConfigSpawns.getUseBetaSpawning() && !canCreatureTypeSpawnHere(worldIn, pos, entry.getSpawnPlacementType())) {debug(entry, 8, pos, enableDebug); return false;}
 		if(entry.getNeedsToSeeSky() && !canPositionSeeSky(worldIn, pos)) {debug(entry, 18, pos, enableDebug); return false;}
 		if(!isHeightLevelSuitable(pos, entry.getHeightLevelRange()[0], entry.getHeightLevelRange()[1])){debug(entry, 9, pos, enableDebug); return false;}
 		if(!isLightLevelSuitable(worldIn, pos, entry.getLightLevelRange()[0], entry.getLightLevelRange()[1])){debug(entry, 10, pos, enableDebug); return false;}
@@ -220,7 +219,7 @@ public class MMSpawnChecks {
 	{
 		 IBlockState iblockstate = worldIn.getBlockState(pos);
 
-		 if(spawnType == MMEnums.IN_LAVA)
+		 if(spawnType == MultiMob.IN_LAVA)
 		 {
 			 return iblockstate.getMaterial() == Material.LAVA && worldIn.getBlockState(pos.down()).getMaterial() == Material.LAVA && !worldIn.getBlockState(pos.up()).isNormalCube();
 		 }

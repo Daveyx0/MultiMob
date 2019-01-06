@@ -8,12 +8,17 @@ import org.apache.logging.log4j.Logger;
 
 import net.daveyx0.multimob.common.MMCommonProxy;
 import net.daveyx0.multimob.config.MMConfig;
+import net.daveyx0.multimob.entity.IMultiMob;
+import net.daveyx0.multimob.entity.IMultiMobLava;
+import net.daveyx0.multimob.entity.IMultiMobPassive;
+import net.daveyx0.multimob.entity.IMultiMobWater;
 import net.daveyx0.multimob.message.MMMessageRegistry;
 import net.daveyx0.multimob.spawn.MMSpawnerEventHandler;
 import net.daveyx0.multimob.util.FileUtil;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLiving.SpawnPlacementType;
+import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -39,7 +44,24 @@ public class MultiMob
 	@SidedProxy(clientSide = "net.daveyx0.multimob.client.MMClientProxy", serverSide = "net.daveyx0.multimob.common.MMCommonProxy")
 	public static MMCommonProxy proxy;
 	private File directory;
+	
+	
+	public final static SpawnPlacementType IN_LAVA = net.minecraftforge.common.util.EnumHelper.addSpawnPlacementType("IN_LAVA", new java.util.function.BiPredicate<net.minecraft.world.IBlockAccess, BlockPos>(){
 
+		@Override
+		public boolean test(IBlockAccess t, BlockPos u) {
+			
+			 IBlockState iblockstate = t.getBlockState(u);
+			 return iblockstate.getMaterial() == Material.LAVA && t.getBlockState(u.down()).getMaterial() == Material.LAVA && !t.getBlockState(u.up()).isNormalCube();
+		}}
+		);
+	;
+	public final static EnumCreatureType MULTIMOB_MONSTER = net.minecraftforge.common.util.EnumHelper.addCreatureType("MULTIMOB_MONSTER", IMultiMob.class, 35, Material.AIR, false, false);
+	public final static EnumCreatureType MULTIMOB_PASSIVE = net.minecraftforge.common.util.EnumHelper.addCreatureType("MULTIMOB_PASSIVE", IMultiMobPassive.class, 10, Material.AIR, false, false);
+	public final static EnumCreatureType MULTIMOB_WATER = net.minecraftforge.common.util.EnumHelper.addCreatureType("MULTIMOB_WATER", IMultiMobWater.class, 10, Material.WATER, false, false);
+	public final static EnumCreatureType MULTIMOB_LAVA = net.minecraftforge.common.util.EnumHelper.addCreatureType("MULTIMOB_LAVA", IMultiMobLava.class, 5, Material.LAVA, false, false);
+
+	
 	@EventHandler
 	public void PreInit(FMLPreInitializationEvent event)
 	{
@@ -58,7 +80,6 @@ public class MultiMob
 			directory.mkdirs();
 		}
 		MMConfig.preInit(directory, event);
-		MMEnums.preInit();
 		
 		proxy.preInit(event);
 	}
