@@ -39,6 +39,7 @@ public class MMSpawnEntry
     private int spawnFrequency;
     private int additionalRarity;
     private int spawnWeight;
+    private int variantID;
 
     public MMSpawnEntry(String entryName, Class<? extends Entity> class1, MMConfigSpawnEntry config)
     {
@@ -75,6 +76,7 @@ public class MMSpawnEntry
         spawnWeight = config.getSpawnWeight();
         creatureType = config.getCreatureType();
         groupSizeRange = config.getGroupSizeRange();
+        variantID = config.getVariantID();
     }
     
     //Get Methods
@@ -191,6 +193,11 @@ public class MMSpawnEntry
     public boolean getNeedsToSeeSky()
     {
     	return needsToSeeSky;
+    }
+    
+    public int getVariantID()
+    {
+    	return variantID;
     }
     
     static enum WeatherCondition

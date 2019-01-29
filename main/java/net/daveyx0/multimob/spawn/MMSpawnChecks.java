@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Set;
 
 import net.daveyx0.multimob.config.MMConfigSpawns;
+import net.daveyx0.multimob.core.MMEntityRegistry;
 import net.daveyx0.multimob.core.MultiMob;
 import net.daveyx0.multimob.spawn.MMSpawnEntry.WeatherCondition;
 import net.minecraft.block.Block;
@@ -30,7 +31,7 @@ public class MMSpawnChecks {
 	
 	public static boolean performSpawnChecks(WorldServer worldIn, BlockPos pos, MMSpawnEntry entry)
 	{
-		//if(entry.getEntryName().equals("_FlameSpewer_Nether")){ enableDebug = true;} else{enableDebug = false;}
+		//if(entry.getEntryName().equals("_Filler_MMMonster")){ enableDebug = true;} else{enableDebug = false;}
 		
 		if(!entry.getIsAllowedToSpawn()) {debug(entry, 0, pos, enableDebug); return false;}
 		if(!isWithinWorldBorder(worldIn, pos)) {debug(entry, 1, pos, enableDebug);return false;}
@@ -54,7 +55,7 @@ public class MMSpawnChecks {
 	
 	public static boolean canEntitySpawnHere(Entity entity, MMSpawnEntry entry)
 	{
-		if(entity == null || !(entity instanceof EntityLiving)){return false;}
+		if(entity == null || !(entity instanceof EntityLiving) || MMEntityRegistry.entities.containsKey(entity.getClass()) && !MMEntityRegistry.entities.get(entity.getClass())){return false;}
 		BlockPos pos = entity.getPosition();
 		
 		EntityLiving entityLiving = (EntityLiving)entity;

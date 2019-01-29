@@ -24,7 +24,7 @@ public class MMConfigSpawnEntry {
 			, category6 = "spawnBiomes", category7 = "spawnDimensions", category8 = "heightLevels", category9 = "lightLevels", category10 = "spawnType",
 			category11 = "weatherCondition", category12 = "spawnBlocks", category13 = "blocksNearSpawn", category14 = "spawnStructures", category15 = "entitiesNearSpawn",
 			category16 = "needsMoreSpace", category17 = "needsToSeeSky", category18 = "canOverrideSpawnChecks", category19 = "creatureTypes", category20= "spawnWeights"
-					, category21 = "spawnGroupSizes";
+					, category21 = "spawnGroupSizes", category22 = "spawnVariants";
 
 	private String entryName;
 	public String entityName;
@@ -36,7 +36,7 @@ public class MMConfigSpawnEntry {
 	private String[] entitiesNear, spawnBlocks, blocksNear, biomes, biomeTypes, structures;
 	private int[] dimensions, heightLevels, lightLevels, groupSize;
 	private boolean allowedOnPeaceful, overrideEntityCanSpawnHere, isAllowedToSpawn, needsLoadsOfSpace, needsToSeeSky;
-	private int spawnFrequency, additionalRarity, spawnWeight;
+	private int spawnFrequency, additionalRarity, spawnWeight, variantID;
 	
 	public MMConfigSpawnEntry(String entryName, String entityName)
 	{
@@ -76,6 +76,7 @@ public class MMConfigSpawnEntry {
 		creatureType = config.get(category19, entryName , defaultCreatureType).getString();
 		spawnWeight = config.get(category20, entryName, defaultSpawnWeight).getInt();
 		groupSize = config.get(category21, entryName , defaultGroupSize).getIntList();
+		variantID = config.get(category22, entryName, defaultVariantID).getInt();
 	}
 	
 	public static void setupCategoryDescriptions(Configuration config)
@@ -97,11 +98,11 @@ public class MMConfigSpawnEntry {
 		config.addCustomCategoryComment(category14, "Structures this mob can spawn inside of; for a list of all different vanilla structures present, check the multimob config folder. Adding multiple will allow the mob to spawn in each structure.");
 		config.addCustomCategoryComment(category16, "Determines if the mob needs more space to spawn; if true the mob will need more air blocks around it to spawn");
 		config.addCustomCategoryComment(category17, "Determines if the mob needs to be under the sky to spawn; if true the mob needs to be able to see the sky in order to spawn");
-		config.addCustomCategoryComment(category18, "Determines if the spawn should use the mob's inherent spawn checks; if false it will not use them and instead use the spawn blocks setting to see which block to spawn on.");
+		config.addCustomCategoryComment(category18, "Determines if the spawn should use the mob's inherent spawn checks; if true it will not use them and instead use the spawn blocks setting to see which block to spawn on.");
 		config.addCustomCategoryComment(category19, "Determine the creature type, which is used to determine the limit of each type that can spawn in the world. Only really useful for mod makers. Valid entries: MULTIMOBMONSTER, MULTIMOBPASSIVE, MULTIMOBWATER, MULTIMOBLAVA, MONSTER, CREATURE, AMBIENT, WATERCREATURE.");
 		config.addCustomCategoryComment(category20, "Spawn weights are used to determine the frequency of the mob being chosen by the spawner. The higher this number, the more chance the mob has to spawn");
 		config.addCustomCategoryComment(category21, "Spawn group size; determines the minimum and maximum amount of mobs that will appear for each spawn.");
-		
+		config.addCustomCategoryComment(category22, "The variant ID determines which Variant of the mob is used for this spawn setup. See the Variant Settings.");
 	}
 	
 	public String getEntryName()
@@ -311,6 +312,10 @@ public class MMConfigSpawnEntry {
 		return this.additionalRarity;
 	}
 	
+	public int getVariantID() {
+		return this.variantID;
+	}
+	
 	public int getSpawnWeight() {
 		return this.spawnWeight;
 	}
@@ -375,7 +380,7 @@ public class MMConfigSpawnEntry {
 	private String[] defaultEntitiesNear = new String[]{""}, defaultSpawnBlocks = new String[]{""}, defaultBlocksNear = new String[]{""}, defaultBiomes = new String[]{""}, defaultBiomeTypes = new String[]{""}, defaultStructures = new String[]{""};
 	private int[] defaultDimensions = new int[]{0}, defaultHeightLevels = new int[]{-1, -1}, defaultLightLevels = new int[]{-1, -1}, defaultGroupSize = new int[]{1,1};
 	private boolean defaultAllowedOnPeaceful = false, defaultOverrideEntityCanSpawnHere = false, defaultNeedsLoadsOfSpace = false, defaultNeedsToSeeSky = false;
-	private int defaultAdditionalRarity = -1, defaultSpawnFrequency = -1;
+	private int defaultAdditionalRarity = -1, defaultSpawnFrequency = -1, defaultVariantID = -1;
 	
 	
 	public MMConfigSpawnEntry setSpawnType(String i) {defaultSpawnType = i;return this;}
@@ -397,6 +402,7 @@ public class MMConfigSpawnEntry {
 	public MMConfigSpawnEntry setSpawnLimit(int i){defaultSpawnFrequency = i; return this;}
 	public MMConfigSpawnEntry setCreatureType(String i) {defaultCreatureType = i;return this;}
 	public MMConfigSpawnEntry setGroupSize(int i, int j){defaultGroupSize[0] = i; defaultGroupSize[1] = j;return this;}
+	public MMConfigSpawnEntry setVariantID(int i){defaultVariantID = i; return this;}
 	
 	public MMConfigSpawnEntry setupBaseAnimalSpawnEntry(boolean overrideSpawnChecks)
 	{

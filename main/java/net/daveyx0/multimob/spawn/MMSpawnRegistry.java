@@ -11,6 +11,7 @@ import net.daveyx0.multimob.core.MultiMob;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntitySpawnPlacementRegistry;
 import net.minecraft.entity.EnumCreatureType;
+import net.minecraft.init.Biomes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.Biome.SpawnListEntry;
@@ -23,6 +24,14 @@ import net.minecraftforge.fml.common.registry.ForgeRegistries;
 public class MMSpawnRegistry 	
 {
 	public static final List<MMSpawnEntry> SPAWNS = new ArrayList<MMSpawnEntry>();
+	
+	public static void registerFillerSpawns()
+	{
+		registerSpawnEntry(new MMConfigSpawnEntry("_Filler_MMMonster", "minecraft:zombie", 100, false).setupBaseMobSpawnEntry(false).setCreatureType("MULTIMOBMONSTER"));
+		registerSpawnEntry(new MMConfigSpawnEntry("_Filler_MMPassive", "minecraft:zombie", 50, false).setupBaseMobSpawnEntry(false).setCreatureType("MULTIMOBPASSIVE"));
+		registerSpawnEntry(new MMConfigSpawnEntry("_Filler_MMWater", "minecraft:zombie", 50, false).setupBaseMobSpawnEntry(false).setCreatureType("MULTIMOBWATER"));
+		registerSpawnEntry(new MMConfigSpawnEntry("_Filler_MMLava", "minecraft:zombie", 50, false).setupBaseMobSpawnEntry(false).setCreatureType("MULTIMOBLAVA"));
+	}
 
 	public static List<MMSpawnEntry> getSpawnEntries() {
 		
@@ -89,7 +98,7 @@ public class MMSpawnRegistry
 	
 	public static void addRegularSpawn(MMSpawnEntry entry)
 	{
-		if(entry.getIsAllowedToSpawn() && entry.getSpawnLimit() != 0 && entry.getSpawnWeight() != 0)
+		if(entry.getSpawnLimit() != 0 && entry.getSpawnWeight() != 0)
 		{
 			boolean addToAllBiomes = false;
 
@@ -98,6 +107,7 @@ public class MMSpawnRegistry
 			{
 				for(Biome biome : ForgeRegistries.BIOMES)
 				{
+					if(!entry.getIsAllowedOnPeaceful() && biome == Biomes.MUSHROOM_ISLAND) {continue;}
 					biome.getSpawnableList(entry.getCreatureType()).add(new SpawnListEntry(entry.getEntityClass(), entry.getSpawnWeight(), entry.getGroupSizeRange()[0], entry.getGroupSizeRange()[1]));
 				}
 			}
@@ -110,6 +120,7 @@ public class MMSpawnRegistry
 				{
 					for(Biome biome: entry.getBiomes())
 					{
+						if(!entry.getIsAllowedOnPeaceful() && biome == Biomes.MUSHROOM_ISLAND) {continue;}
 						biomes.add(biome);
 					}
 				}
@@ -140,6 +151,8 @@ public class MMSpawnRegistry
 				{
 					for(Biome biome : biomes)
 					{
+						if(!entry.getIsAllowedOnPeaceful() && biome == Biomes.MUSHROOM_ISLAND) {continue;}
+						
 						biome.getSpawnableList(entry.getCreatureType()).add(new SpawnListEntry(entry.getEntityClass(), entry.getSpawnWeight(), entry.getGroupSizeRange()[0], entry.getGroupSizeRange()[1]));
 					}
 				}

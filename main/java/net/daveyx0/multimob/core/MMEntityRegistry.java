@@ -2,6 +2,7 @@ package net.daveyx0.multimob.core;
 
 import java.util.HashMap;
 
+import net.daveyx0.multimob.spawn.MMConfigSpawnEntry;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.EntityRegistry;

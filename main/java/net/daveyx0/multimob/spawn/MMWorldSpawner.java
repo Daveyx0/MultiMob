@@ -180,7 +180,9 @@ public class MMWorldSpawner
 	                                                    exception.printStackTrace();
 	                                                    return j4;
 	                                                }
-
+	                                                
+	                                                if(entityliving != null)
+	                                                {
 	                                                entityliving.setLocationAndAngles((double)f, (double)i3, (double)f1, worldServerIn.rand.nextFloat() * 360.0F, 0.0F);
 
 	                                                net.minecraftforge.fml.common.eventhandler.Event.Result canSpawn = net.minecraftforge.event.ForgeEventFactory.canEntitySpawn(entityliving, worldServerIn, f, i3, f1, false);
@@ -206,6 +208,7 @@ public class MMWorldSpawner
 	                                                }
 
 	                                                j4 += j2;
+	                                                }
 	                                            }
 	                                        }
 	                                    }

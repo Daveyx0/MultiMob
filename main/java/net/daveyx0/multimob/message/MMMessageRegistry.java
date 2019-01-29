@@ -21,6 +21,7 @@ public class MMMessageRegistry {
 	{
 		registerMessage(MessageMMParticle.Handler.class, MessageMMParticle.class, Side.CLIENT);
 		registerMessage(MessageMMTameable.Handler.class, MessageMMTameable.class, Side.CLIENT);
+		registerMessage(MessageMMVariant.Handler.class, MessageMMVariant.class, Side.CLIENT);
 	}
 
 	public static <REQ extends IMessage, REPLY extends IMessage> void registerMessage(Class<? extends IMessageHandler<REQ, REPLY>> messageHandler, Class<REQ> requestMessageType, Side receivingSide) {

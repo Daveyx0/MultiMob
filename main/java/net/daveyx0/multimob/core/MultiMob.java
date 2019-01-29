@@ -13,6 +13,7 @@ import net.daveyx0.multimob.entity.IMultiMobLava;
 import net.daveyx0.multimob.entity.IMultiMobPassive;
 import net.daveyx0.multimob.entity.IMultiMobWater;
 import net.daveyx0.multimob.message.MMMessageRegistry;
+import net.daveyx0.multimob.spawn.MMSpawnRegistry;
 import net.daveyx0.multimob.spawn.MMSpawnerEventHandler;
 import net.daveyx0.multimob.util.FileUtil;
 import net.minecraft.block.material.Material;
@@ -88,6 +89,8 @@ public class MultiMob
 	public void Init(FMLInitializationEvent event)
 	{
 		MMTameableEntries.registerTameables();
+		MMVariantEntries.registerVariants();
+		MMSpawnRegistry.registerFillerSpawns();
 		proxy.init(event);
 	}
 

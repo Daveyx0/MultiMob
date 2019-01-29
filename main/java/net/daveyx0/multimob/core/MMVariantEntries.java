@@ -5,22 +5,24 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import net.daveyx0.multimob.common.capabilities.VariantEntityEntry;
+import net.daveyx0.atmosmobs.entity.passive.EntityButterfly;
+import net.daveyx0.multimob.variant.MMVariantEntityEntry;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.monster.EntityZombie;
 
 public class MMVariantEntries {
 
-	public static final Map<Class<? extends Entity>, List<VariantEntityEntry> > variantEntries = new HashMap();
+	public static final Map<Class<? extends Entity>, List<MMVariantEntityEntry> > variantEntries = new HashMap();
 	
 	public static void registerVariants()
 	{
-		//addVariant(EntityButterfly.class, 0, "Blue");
+		//addVariant(EntityZombie.class, 1, "zombie_grey");
 	}
 	
 	public static void addVariant(Class<? extends Entity> entityClass, int variantID, String variantName)
 	{
-		VariantEntityEntry entry = new VariantEntityEntry(variantID, variantName);
-		List<VariantEntityEntry> variantList = new ArrayList();
+		MMVariantEntityEntry entry = new MMVariantEntityEntry(variantID, variantName);
+		List<MMVariantEntityEntry> variantList = new ArrayList();
 		if(variantEntries.containsKey(entityClass))
 		{
 			variantList = variantEntries.get(entityClass);
@@ -30,18 +32,20 @@ public class MMVariantEntries {
 		variantEntries.put(entityClass, variantList);
 	}
 	
-	public VariantEntityEntry getVariantByName(String name)
+	public static MMVariantEntityEntry getVariantEntry(Class<? extends Entity> entityClass, int id)
 	{
-		for(List<VariantEntityEntry> list : variantEntries.values())
-		{
-			for(VariantEntityEntry entry : list)
-			{
-				if(entry.getVariantName().equals(name))
-				{
-					return entry;
-				}
-			}
-		}
+		 List<MMVariantEntityEntry> variants = variantEntries.get(entityClass);
+		 
+		 if(variants != null && !variants.isEmpty())
+		 {
+			 for(MMVariantEntityEntry variant: variants)
+			 {
+				 if(variant.getVariantIndex() == id)
+				 {
+					 return variant;
+				 }
+			 }
+		 }
 
 		return null;
 	}

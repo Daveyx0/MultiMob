@@ -1,11 +1,11 @@
-package net.daveyx0.multimob.common.capabilities;
+package net.daveyx0.multimob.variant;
 
-public class VariantEntityEntry
+public class MMVariantEntityEntry
 {
 	int variantIndex;
 	String variantName;
 	
-	public VariantEntityEntry(int variantId, String name)
+	public MMVariantEntityEntry(int variantId, String name)
 	{
 		this.variantIndex = variantId;
 		this.variantName = name;

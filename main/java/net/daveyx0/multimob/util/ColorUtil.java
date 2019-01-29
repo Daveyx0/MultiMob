@@ -101,7 +101,7 @@ public class ColorUtil
 					{
 						IBakedModel bakedModel = Minecraft.getMinecraft().getBlockRendererDispatcher().getBlockModelShapes().getModelForState(state);
 					
-					if(bakedModel != null && !Loader.isModLoaded("codechickenlib"))
+					if(bakedModel != null && !Loader.isModLoaded("codechickenlib") && !Loader.isModLoaded("botania"))
 					{
 							List<BakedQuad> quads = bakedModel.getQuads(state, face, 1);
 						 
